@@ -23,13 +23,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: 'Holidays',
+      title: 'Employee',
       theme: ThemeData(
         backgroundColor: Colors.grey[800],
         primarySwatch: Colors.blueGrey,
       ),
       onGenerateRoute: router.generateRoute,
-      initialRoute: routes.holidayScreen,
+      initialRoute: routes.employeeScreen,
     );
   }
 }

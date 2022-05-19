@@ -6,7 +6,6 @@ class EmployeeRepository extends ApiProvider {
     List response = await get(
         path:
             '5d565297300000680030a986'); // getting response from ApiProvider class
-    print(response);
     // List jsonResult = response["england-and-wales"]['events'];
     return response.map((job) => EmployeeObj.fromJson(job)).toList();
   }

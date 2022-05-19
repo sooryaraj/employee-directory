@@ -2,6 +2,7 @@ import 'package:employee_directory/helpers/local_database_dao.dart';
 import 'package:employee_directory/models/employee_obj.dart';
 import 'package:employee_directory/services/employee_repository.dart';
 import 'package:employee_directory/utils/enums.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class EmployeeScreenController extends GetxController {
@@ -9,6 +10,8 @@ class EmployeeScreenController extends GetxController {
   var isLoading = false.obs;
   var errorMessage = "".obs;
   var selectedEmpObject = EmployeeObj().obs;
+  final txtSearch = TextEditingController();
+  RxString searchText = ''.obs;
   var dao = LocalDatabaseDao();
   Rx<RetriveState> status = RetriveState.loading.obs;
 
@@ -18,10 +21,19 @@ class EmployeeScreenController extends GetxController {
     super.onInit();
     // load data from local db
     loadEmployeeDetailsFromLocal();
+    txtSearch.addListener(() {
+      searchText.value = txtSearch.text;
+      loadEmployeeDetailsFromLocal(where: txtSearch.text, search: true);
+    });
+
+    // debounce(searchText, (_) {
+    //   print("debouce$_");
+    // }, time: const Duration(seconds: 1));
   }
 
   // load details from server when pull down the refresh indicator and loading first time then store in sembast
   void loadEmployeeDetailsFromServer({bool reset = true}) {
+    print("Load Employee from server");
     status.value =
         RetriveState.loading; // for showing a CircularProgressIndicator()
     isLoading(true);
@@ -43,13 +55,15 @@ class EmployeeScreenController extends GetxController {
     isLoading(false);
   }
 
-  void loadEmployeeDetailsFromLocal() {
+  void loadEmployeeDetailsFromLocal({String where = "", bool search = false}) {
+    print("Load Employee from local");
+    print(where);
     status.value = RetriveState.loading;
     isLoading(true);
     try {
-      dao.getEmployeeFromLocal().then((value) {
+      dao.getEmployeeFromLocal(where: where).then((value) {
         listEmployees.value = value;
-        if (value.isEmpty) {
+        if (value.isEmpty && !search) {
           loadEmployeeDetailsFromServer();
         } else {
           status.value = RetriveState.success;

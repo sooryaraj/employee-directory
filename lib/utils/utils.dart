@@ -16,6 +16,13 @@ class Utils {
     );
   }
 
+  static unfocus(context) {
+    var currentFocus = FocusScope.of(context);
+    if (!currentFocus.hasPrimaryFocus) {
+      currentFocus.unfocus();
+    }
+  }
+
   static Future<void> openMap(double latitude, double longitude) async {
     String googleUrl =
         'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';

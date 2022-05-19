@@ -18,24 +18,36 @@ class EmployeeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
         minimum: const EdgeInsets.all(10.0),
-        child: Scaffold(
-          appBar: AppBar(
-            title: const Text("Employees"),
-            centerTitle: true,
+        child: GestureDetector(
+          onTap: () {
+            Utils.unfocus(context);
+          },
+          child: Scaffold(
+            appBar: AppBar(
+              title: Container(
+                width: double.infinity,
+                height: 40,
+                color: Colors.white,
+                child: Center(
+                  child: TextField(
+                    controller: _employeeScreenController.txtSearch,
+                    decoration: const InputDecoration(
+                      hintText: 'Search for Employee',
+                      prefixIcon: Icon(Icons.search),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            body: const EmployeeListView(),
           ),
-          body: const HolidayListView(),
         ));
   }
 }
 
-class HolidayListView extends StatefulWidget {
-  const HolidayListView({Key? key}) : super(key: key);
+class EmployeeListView extends StatelessWidget {
+  const EmployeeListView({Key? key}) : super(key: key);
 
-  @override
-  _HolidayListViewState createState() => _HolidayListViewState();
-}
-
-class _HolidayListViewState extends State<HolidayListView> {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
@@ -60,9 +72,8 @@ class _HolidayListViewState extends State<HolidayListView> {
               var _data = _employeeData[index];
               return GestureDetector(
                 onTap: () {
-                  print(_data.profileImage);
                   _employeeScreenController.selectedEmpObject.value = _data;
-                  Get.toNamed(routes.holidayDetailsScreen);
+                  Get.toNamed(routes.employeeDetailsScreen);
                 },
                 child: ListTile(
                   title: Text(_data.name ?? ""),
@@ -89,7 +100,7 @@ class _HolidayListViewState extends State<HolidayListView> {
       } else if (_employeeScreenController.status.value == RetriveState.empty) {
         return Utils.emptyWidget(
             title:
-                "No Holidays Available"); // custom widget for show a empty message
+                "No Employee Available"); // custom widget for show a empty message
       } else {
         return Utils.loader();
 

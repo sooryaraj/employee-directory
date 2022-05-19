@@ -1,2 +1,2 @@
-const String holidayScreen = 'HolidayScreen';
-const String holidayDetailsScreen = 'HolidayDetailsScreen';
+const String employeeScreen = 'EmployeeScreen';
+const String employeeDetailsScreen = 'EmployeeDetailsScreen';
